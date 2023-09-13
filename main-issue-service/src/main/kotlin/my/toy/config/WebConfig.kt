@@ -10,17 +10,20 @@ import org.springframework.web.method.support.ModelAndViewContainer
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
 
 @Configuration
-class WebConfig : WebMvcConfigurationSupport() {
+class WebConfig(
+    private val autoUserHandlerArgumentResolver: AuthUserHandlerArgumentResolver
+) : WebMvcConfigurationSupport() {
 
     override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver>) {
+        argumentResolvers.apply {
+            add(autoUserHandlerArgumentResolver)
+        }
     }
 }
 
 @Component
 class AuthUserHandlerArgumentResolver : HandlerMethodArgumentResolver {
-    override fun supportsParameter(parameter: MethodParameter): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun supportsParameter(parameter: MethodParameter): Boolean = AuthUser::class.java.isAssignableFrom(parameter.parameterType)
 
     override fun resolveArgument(
         parameter: MethodParameter,
@@ -28,7 +31,17 @@ class AuthUserHandlerArgumentResolver : HandlerMethodArgumentResolver {
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): Any? {
-        TODO("Not yet implemented")
+
+        return AuthUser (
+            userId = 1,
+            username = "테스트"
+        )
     }
 
 }
+
+data class AuthUser (
+    val userId : Long,
+    val username: String,
+    val profileUrl: String? = null,
+)
