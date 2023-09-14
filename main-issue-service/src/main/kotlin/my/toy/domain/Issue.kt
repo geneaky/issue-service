@@ -11,6 +11,8 @@ class Issue(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     var userId: Long,
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
+    val comments: MutableList<Comment> = mutableListOf(),
     var description: String,
     var summary: String,
     @Enumerated(EnumType.STRING)

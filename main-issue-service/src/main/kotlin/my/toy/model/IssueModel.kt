@@ -1,6 +1,7 @@
 package my.toy.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import my.toy.domain.Comment
 import my.toy.domain.Issue
 import my.toy.domain.enums.IssuePriority
 import my.toy.domain.enums.IssueStatus
@@ -17,6 +18,7 @@ data class IssueRequest(
 
 data class IssueResponse(
     val id: Long,
+    val comments: List<CommentResponse> = emptyList(),
     val summary: String,
     val description: String,
     val userId: Long,
@@ -34,6 +36,7 @@ data class IssueResponse(
             with(issue) {
                 IssueResponse(
                     id = id!!,
+                    comments = issue.comments.sortedByDescending(Comment::id).map(Comment::toResponse),
                     summary = summary,
                     description = description,
                     userId = userId,
