@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.io.File
+import javax.imageio.stream.ImageInputStream
 
 @RestController
 @RequestMapping("/api/v1/users")
